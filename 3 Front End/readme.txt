@@ -1,0 +1,2 @@
+This is the UI, it provides a simple interface to call all the fastAPI endpoints. It is enhanced with the functionality of recording and predicting sounds on the go.
+Note : repalce the local host address with the address of (seperatly) provided cloud hosted VM address to access the endpoints.

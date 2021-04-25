@@ -1,0 +1,306 @@
+<html>
+<head>
+    <title>Aftab Khalil</title>
+    <link href="resources/bootstrap.css" rel="stylesheet" />
+    <script src="resources/jQuery.js"></script>
+    <script src="resources/bootstrap.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <style>
+        #progressdiv {
+            width: 201px;
+            background-color: #ddd;
+            padding: 0px;
+            border: 1px solid black;
+        }
+
+        #progressbar {
+            width: 0;
+            height: 36px;
+            background-color: #198754;
+        }
+
+        .btn-custom {
+            width: 100%;
+        }
+
+        .btn-custom2 {
+            margin-top: -22px;
+        }
+    </style>
+
+</head>
+<body>
+    <br />
+    <div class="container">
+        <div class="row text-danger">
+            <div class="col-sm-12"><h3>Data Science Product Development - Spring 2021 - Project part 3</h3></div>
+            <div class="col-sm-12"><h3>Submitted to : Dr Amir Ali Abdullah</h3></div>
+            <div class="col-sm-12"><h3>Submitted by : Aftab Khalil</h3></div>
+            <div class="col-sm-12"><h3>MSCS - 19837</h3></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="baseURL" value="http://localhost:9193/" placeholder="http://localhost:9193/">
+            </div>
+            <div class="col-sm-2"><span class="form-control btn btn-success" onclick="reconnect()">Reconnect</span></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">Application Status : <b> <span id="appStatus" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                Hello Me :
+            </div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"><span class="btn btn-primary" onclick="hello()">Call Hello API</span></div>
+            <div class="col-sm-9"><b><span id="resultName" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2"><span class="btn btn-primary" onclick="install_dependencies()">Install dependencies</span></div>
+            <div class="col-sm-9">Please wait util its mention that dependencies are installed : <b><span id="resultInstallDependencies" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                Download data (optional) :
+            </div>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="dataset" placeholder="Dataset : 'data' or 'data_sample'">
+            </div>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="tableData" placeholder="biqQuery Table : 'sounds' or 'sounds_sample'">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"><span class="btn btn-primary" onclick="download_data()">Download</span></div>
+            <div class="col-sm-9">Please wait until its mention that data is downloaded : <b><span id="resultDownload" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                Train Model <small class="text-danger">(Do not opt unless needed)</small> :
+            </div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="fromScratch" placeholder="From Scratch : False">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"><span class="btn btn-primary" onclick="train_model()">Train Model</span></div>
+            <div class="col-sm-9">Please wait while model is trained : <b><span id="resultTrainModel" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                Predict label : <span>Predict from following classes = ["bed", "bird", "cat", "dog", "down", "eight", "five", "four", "go", "happy", "house", "left", "marvin", "nine", "no", "off", "on", "one", "right", "seven", "sheila", "six", "stop", "three", "tree", "two", "up", "wow", "yes", "zero"]</span>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                By File Upload:
+            </div>
+            <div class="col-sm-10">
+                <input type="file" class="form-control" id="file">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"><span class="btn btn-primary" onclick="predict_label()">Predict</span></div>
+            <div class="col-sm-9"><b>The input is predicted as : <span id="prediction" class="text-success bold"></span></b></div>
+        </div>
+        <hr />
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                Or Record sound (1 sec)
+            </div>
+            <div class="col-sm-2">
+                <button id="recordButton" class="btn btn-success btn-custom">Record</button>
+            </div>
+            <div class="col-sm-2">
+                <div id="progressdiv">
+                    <div id="progressbar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Recordings</h3>
+            </div>
+            <div class="col-sm-12">
+                <ol id="recordingsList"></ol>
+            </div>
+        </div>
+    </div>
+    <script src="resources/app.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script>
+        base_url = "http://localhost:9193/"
+
+        function reconnect() {
+            base_url = $('#baseURL').val();
+            $('#appStatus').text("");
+            app_status();
+        }
+
+        function app_status() {
+            $.ajax({
+                url: base_url,
+                method: "GET",
+                success: function (r) {
+                    console.log(r);
+                    $('#appStatus').text(r.message);
+                    $('#appStatus').removeClass('text-danger');
+                    $('#appStatus').addClass('text-success');
+                },
+                error: function (r) {
+                    console.log(r);
+                    $('#appStatus').text("Unable to connect to server!");
+                    $('#appStatus').removeClass('text-success');
+                    $('#appStatus').addClass('text-danger');
+                }
+            });
+        }
+        app_status();
+
+        function hello() {
+            $.ajax({
+                url: base_url + "hello/",
+                method: "GET",
+                data:
+                {
+                    name: $('#name').val()
+                },
+                success: function (r) {
+                    console.log(r);
+                    $('#resultName').text(r.message);
+                },
+                error: function (r) {
+                    console.log(r);
+                }
+            });
+        }
+
+        function install_dependencies() {
+            $.ajax({
+                url: base_url + "install_dependencies/",
+                method: "GET",
+                success: function (r) {
+                    console.log(r);
+                    $('#resultInstallDependencies').text(r.message);
+                },
+                error: function (r) {
+                    console.log(r);
+                }
+            });
+        }
+
+        function download_data() {
+            $.ajax({
+                url: base_url + "download/",
+                method: "GET",
+                data:
+                {
+                    root: $('#dataset').val(),
+                    table: $('#tableData').val()
+                },
+                success: function (r) {
+                    console.log(r);
+                    $('#resultDownload').text(r.message);
+                },
+                error: function (r) {
+                    console.log(r);
+                }
+            });
+        }
+
+        function train_model() {
+            $.ajax({
+                url: base_url + "train_model/",
+                method: "GET",
+                data:
+                {
+                    already_trained: $('#fromScratch').val()
+                },
+                success: function (r) {
+                    console.log(r);
+                    $('#resultTrainModel').text(r.message);
+                },
+                error: function (r) {
+                    console.log(r);
+                    $('#resultTrainModel').text(JSON.parse(r));
+
+                }
+            });
+        }
+
+        function predict_label() {
+            //https://medium.com/@stiffmanadam/how-to-upload-image-file-using-ajax-and-jquery-758a45f67e97
+
+            var fd = new FormData();
+            var file = $('#file')[0].files[0];
+            fd.append('audio', file);
+
+            $.ajax({
+                url: base_url + "upload_file/",
+                type: "POST",
+                processData: false,
+
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (r) {
+                    console.log(r);
+                    if (r.message == file.name) {
+                        $('#prediction').text("file uploaded now predicting");
+
+                        $.ajax({
+                            url: base_url + "predict/",
+                            method: "GET",
+                            success: function (r) {
+                                console.log(r);
+                                $('#prediction').text(r.message);
+                            },
+                            error: function (r) {
+                                console.log(r);
+                                $('#prediction').text(JSON.parse(r));
+                            }
+                        });
+                    }
+                    else {
+                        $('#prediction').text(r.message);
+                    }
+                },
+                error: function (r) {
+                    console.log(r);
+                    $('#prediction').text(JSON.parse(r));
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+</html>
